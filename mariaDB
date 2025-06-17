@@ -1,0 +1,57 @@
+#!/bin/bash
+set -e
+
+echo "📦 MariaDB 설치 자동화 스크립트 시작"
+
+# --- OS 감지 ---
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    DISTRO_ID=$ID
+    ID_LIKE=${ID_LIKE,,}
+else
+    echo "❌ OS 정보를 감지할 수 없습니다."
+    exit 1
+fi
+
+# --- 설치 여부 확인 ---
+if command -v mysql >/dev/null 2>&1; then
+    CURRENT_VER=$(mysql --version | grep -oP 'Distrib \K[0-9.]+')
+    echo "✅ 이미 설치된 MariaDB 버전: $CURRENT_VER"
+    exit 0
+fi
+
+# --- 안정 버전 목록 검색 (표시만) ---
+echo "🔍 설치 가능한 안정 버전 목록 (표시용):"
+curl -s https://mariadb.org/download/ | grep -Eo '10\.[0-9]+\.[0-9]+' | sort -u | head -n 5
+
+# --- Debian 계열 ---
+if [[ "$ID_LIKE" == *"debian"* ]]; then
+    echo "🟢 Debian 계열 감지됨: $DISTRO_ID"
+
+    sudo apt-get update -y
+    sudo apt-get install -y curl gnupg lsb-release
+
+    echo "🌐 MariaDB 저장소 등록"
+    curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | sudo bash
+
+    sudo apt-get update -y
+    sudo apt-get install -y mariadb-server mariadb-client
+
+# --- RHEL 계열 ---
+elif [[ "$ID_LIKE" == *"rhel"* || "$DISTRO_ID" =~ ^(rocky|almalinux|centos)$ ]]; then
+    echo "🔴 RHEL 계열 감지됨: $DISTRO_ID"
+
+    sudo dnf -y install curl policycoreutils
+    curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | sudo bash
+
+    sudo dnf -y install MariaDB-server MariaDB-client
+
+else
+    echo "❌ 이 배포판은 지원되지 않습니다: $DISTRO_ID"
+    exit 1
+fi
+
+# --- 서비스 시작 및 확인 ---
+sudo systemctl enable --now mariadb
+echo "✅ MariaDB 서비스가 시작되었습니다."
+mysql --version
