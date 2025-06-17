@@ -28,7 +28,7 @@
 ##################################################
 
 ```bash
-git clone https://github.com/ycl/cross_shell.git
+git clone https://github.com/chazown/cross_shell.git
 cd cross_shell
 chmod +x base-setup.sh
 ./base-setup.sh
