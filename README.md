@@ -1,13 +1,15 @@
 ## 🐧 Linux Automation Shell Script — 보안정책 테스트용 기본 환경 자동화
 
-이 스크립트는 \*\*Rocky Linux (CentOS/RHEL 계열)\*\*와 **Ubuntu/Debian 계열** 리눅스 배포판을 자동으로 감지하여, 보안 정책 테스트를 위한 기본 서버 환경을 한 번에 구성합니다.
+이 스크립트는 \*\*Rocky Linux (CentOS/RHEL 계열)\*\*와 **Ubuntu/Debian 계열** 리눅스 배포판을 자동으로 감지하여,
+보안 정책 테스트를 위한 기본 서버 환경을 한 번에 구성합니다.
 
 ##################################################
 #                   주요 기능                    #
 ##################################################
 * **OS 자동 감지**: Rocky Linux와 Ubuntu/Debian을 구분해 맞춤 설치 및 설정 적용
 * **중복 설치 방지**: 이미 설치된 패키지는 재설치하지 않고 자동으로 건너뜀
-* **필수 패키지 설치**: curl, git, vim, htop, wget, net-tools, tar, gzip, bzip2, openssh-server, bind9, samba, vsftpd, isc-dhcp-server
+* **필수 패키지 설치**: curl, git, vim, htop, wget, net-tools, tar, gzip,
+                       bzip2, openssh-server, bind9, samba, vsftpd, isc-dhcp-server
 * **시스템 업데이트**: 패키지 목록 업데이트 및 업그레이드 자동 실행
 * **SSH 서버 활성화 및 설정 변경**
 
